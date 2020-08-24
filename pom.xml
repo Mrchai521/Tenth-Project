@@ -11,12 +11,13 @@
     <modules>
         <module>tensquare_common</module>
         <module>tensquare_article</module>
+        <module>tensquare_notice</module>
     </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.4.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
         <relativePath/>
     </parent>
     ​

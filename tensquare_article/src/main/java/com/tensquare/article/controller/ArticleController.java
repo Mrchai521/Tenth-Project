@@ -19,11 +19,12 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/article")
+@CrossOrigin
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
     public Result findAll() {
         List list = articleService.findAll();
         return new Result(true, StatusCode.OK, "查询成功", list);

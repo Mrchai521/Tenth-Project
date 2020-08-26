@@ -1,4 +1,4 @@
-package com.tensquare.pojo;
+package com.tensquare.user.pojo;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;

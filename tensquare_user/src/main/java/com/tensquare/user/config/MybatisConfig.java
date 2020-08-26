@@ -1,4 +1,4 @@
-package com.tensquare.config;
+package com.tensquare.user.config;
 
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;

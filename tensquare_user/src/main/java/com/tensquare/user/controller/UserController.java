@@ -1,9 +1,9 @@
-package com.tensquare.controller;
+package com.tensquare.user.controller;
 
 import com.tensquare.entity.Result;
 import com.tensquare.entity.StatusCode;
-import com.tensquare.pojo.User;
-import com.tensquare.service.IUservice;
+import com.tensquare.user.pojo.User;
+import com.tensquare.user.service.IUservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +19,12 @@ public class UserController {
     @Autowired
     private IUservice iUservice;
 
-    public Result login(@RequestBody User user){
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public Result login(@RequestBody User user) {
         User userResult = iUservice.login(user);
-        if (userResult != null){
-            return new Result(true, StatusCode.OK,"登录成功",userResult);
+        if (userResult != null) {
+            return new Result(true, StatusCode.OK, "登录成功", userResult);
         }
-        return  new Result(false,StatusCode.ERROR,"登录失败",null);
+        return new Result(false, StatusCode.ERROR, "登录失败", null);
     }
 }

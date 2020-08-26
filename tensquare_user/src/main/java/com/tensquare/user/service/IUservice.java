@@ -1,6 +1,6 @@
-package com.tensquare.service;
+package com.tensquare.user.service;
 
-import com.tensquare.pojo.User;
+import com.tensquare.user.pojo.User;
 
 /**
  * @description:

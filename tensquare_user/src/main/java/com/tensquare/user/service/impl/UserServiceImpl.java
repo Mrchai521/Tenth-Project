@@ -1,8 +1,8 @@
-package com.tensquare.service.impl;
+package com.tensquare.user.service.impl;
 
-import com.tensquare.dao.UserDao;
-import com.tensquare.pojo.User;
-import com.tensquare.service.IUservice;
+import com.tensquare.user.dao.UserDao;
+import com.tensquare.user.pojo.User;
+import com.tensquare.user.service.IUservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

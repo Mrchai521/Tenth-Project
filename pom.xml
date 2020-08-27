@@ -12,6 +12,8 @@
         <module>tensquare_common</module>
         <module>tensquare_article</module>
         <module>tensquare_notice</module>
+        <module>tensquare_eureka</module>
+        <module>tensquare_encrypt</module>
     </modules>
 
     <parent>
@@ -34,6 +36,17 @@
         <lombok.version>1.18.6</lombok.version>
     </properties>
     ​
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Greenwich.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

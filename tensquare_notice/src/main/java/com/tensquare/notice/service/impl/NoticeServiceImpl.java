@@ -12,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @description:
+ * @description: 通知模块的实现类
  * @author:柴新峰
  * @create:2020/8/24
  */

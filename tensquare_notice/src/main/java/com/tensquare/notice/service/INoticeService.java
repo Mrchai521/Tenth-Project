@@ -5,7 +5,7 @@ import com.tensquare.notice.pojo.Notice;
 import com.tensquare.notice.pojo.NoticeFresh;
 
 /**
- * @description:
+ * @description: 通知模块接口
  * @author:柴新峰
  * @create:2020/8/24
  */

@@ -2,6 +2,7 @@ package com.tensquare.notice.pojo;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @description:
@@ -10,6 +11,7 @@ import lombok.Data;
  */
 @TableName("tb_notice_fresh")
 @Data
+@EqualsAndHashCode
 public class NoticeFresh {
     private String userId;
     private String noticeId;

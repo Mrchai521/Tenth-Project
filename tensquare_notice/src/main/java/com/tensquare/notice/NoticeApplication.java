@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 /**
- * @description:
+ * @description: 通知模块的启动类
  * @author:柴新峰
  * @create:2020/8/24
  */

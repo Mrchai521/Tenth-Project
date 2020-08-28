@@ -10,6 +10,7 @@ import com.tensquare.notice.service.INoticeService;
 import com.tensquare.utils.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.crypto.Data;
 import java.util.Date;
@@ -51,8 +52,8 @@ public class NoticeServiceImpl implements INoticeService {
         noticeDao.updateById(notice);
     }
 
-    @Override
-    public void save(Notice notice) {
+    // 废弃
+    public void save1(Notice notice) {
         // 设置初始值(设置状态 0表示未读，1表示已读)
         notice.setState("0");
         notice.setCreatetime(new Date());
@@ -66,6 +67,17 @@ public class NoticeServiceImpl implements INoticeService {
         noticeFresh.setNoticeId(id);
         noticeFresh.setUserId(notice.getReceiverId());
         noticeFreshDao.insert(noticeFresh);
+    }
+
+    @Override
+    @Transactional
+    public void save(Notice notice) {
+        //初始化数据
+        notice.setCreatetime(new Date());
+        notice.setState("0");
+        //通知消息入库
+        notice.setId(idWorker.nextId() + "");
+        noticeDao.insert(notice);
     }
 
     @Override

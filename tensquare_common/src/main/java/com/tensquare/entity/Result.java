@@ -1,9 +1,6 @@
 package com.tensquare.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * @description:
@@ -13,6 +10,7 @@ import lombok.Setter;
 @Data
 @EqualsAndHashCode
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class Result {
     /**
      * 是否成功

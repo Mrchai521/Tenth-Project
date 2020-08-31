@@ -4,9 +4,15 @@ import com.tensquare.base.dao.LabelDao;
 import com.tensquare.base.pojo.Label;
 import com.tensquare.base.service.LabelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,5 +54,31 @@ public class LabelServiceImpl implements LabelService {
             return label.get();
         }
         return null;
+    }
+
+    @Override
+    public List<Label> findSearch(Label label) {
+        return labelDao.findAll(new Specification<Label>() {
+            @Override
+            public Predicate toPredicate(Root<Label> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                // 声明一个集合，用于存储所有条件
+                ArrayList<Predicate> list = new ArrayList<>();
+                if (label.getLabelname() != null && !"".equals(label.getLabelname())) {
+                    //根据标签的名称，模糊查询
+                    Predicate predicate = criteriaBuilder.like(root.get("labelname").as(String.class), "%" + label.getLabelname() + "%");
+                    list.add(predicate);
+                }
+                if (label.getState() != null && !"".equals(label.getState())) {
+                    // 等值查询标签的标签
+                    Predicate predicate = criteriaBuilder.equal(root.get("state").as(String.class), label.getState());
+                    list.add(predicate);
+                }
+                // 创建一个数组，作为最终的返回值条件
+                Predicate[] parr = new Predicate[list.size()];
+                // 把list转为数组
+                list.toArray(parr);
+                return criteriaBuilder.and(parr);
+            }
+        });
     }
 }

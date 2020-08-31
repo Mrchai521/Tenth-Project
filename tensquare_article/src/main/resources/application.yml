@@ -8,6 +8,28 @@ spring:
     url: jdbc:mysql://121.36.25.190:3306/tensquare_article?characterEncoding=utf-8
     username: root
     password: 123456
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: 300
+        max-idle: 16
+        min-idle: 8
+    database: 0
+    local-redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      password:
+      lettuce:
+        pool:
+          max-active: 16
+          max-wait: 100
+          max-idle: 8
+          min-idle: 4
 # Mybatis-Plus 配置
 mybatis-plus:
   #  mapper-locations: classpath:/mapper/*Mapper.xml

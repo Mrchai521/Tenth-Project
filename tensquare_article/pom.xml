@@ -30,11 +30,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
-        <!--Redis依赖-->
+        <!--&lt;!&ndash;Redis依赖&ndash;&gt;
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 </project>

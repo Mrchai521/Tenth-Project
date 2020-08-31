@@ -7,6 +7,8 @@ import com.tensquare.entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author: 柴新峰
  * @date: 2020-08-30 17:39
@@ -73,5 +75,15 @@ public class LabelController {
     public Result deleteById(@PathVariable("labelId") String labelId) {
         labelService.deleteById(labelId);
         return new Result(true, StatusCode.OK, "删除成功!", null);
+    }
+
+    /**
+     * @param label
+     * @return
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public Result findSearch(@RequestBody Label label) {
+        List<Label> list = labelService.findSearch(label);
+        return new Result(true, StatusCode.OK, "查询成功!", list);
     }
 }

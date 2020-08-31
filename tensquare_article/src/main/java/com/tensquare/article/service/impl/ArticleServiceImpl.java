@@ -29,13 +29,12 @@ import java.util.Set;
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleDao articleDao;
-
     @Autowired
     private IdWorker idWorker;
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    @Autowired
-    private RedisTemplate redisTemplate;
+    /*@Autowired
+    private RedisTemplate redisTemplate;*/
 
     @Override
     public List<Article> findAll() {
@@ -81,7 +80,7 @@ public class ArticleServiceImpl implements ArticleService {
         return page1;
     }
 
-    public Boolean subscribe(String userId, String articleId) {
+   /* public Boolean subscribe(String userId, String articleId) {
         //根据文章id查询文章作者id
         String authorId = articleDao.selectById(articleId).getUserid();
         //创建Rabbit管理器
@@ -115,8 +114,7 @@ public class ArticleServiceImpl implements ArticleService {
             //声明队列和绑定队列
             rabbitAdmin.declareQueue(queue);
             rabbitAdmin.declareBinding(binding);
-
             return true;
         }
-    }
+    }*/
 }

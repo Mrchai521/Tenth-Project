@@ -40,4 +40,11 @@ public interface LabelService {
      * @return
      */
     Label findById(String id);
+
+    /**
+     * 分页查询
+     * @param label
+     * @return
+     */
+    List<Label> findSearch(Label label);
 }

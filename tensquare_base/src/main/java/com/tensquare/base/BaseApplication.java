@@ -1,7 +1,6 @@
 package com.tensquare.base;
 
 import com.tensquare.utils.IdWorker;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.Bean;
  * @create:2020/8/28
  */
 @SpringBootApplication
-@MapperScan("com.tensquare.base.dao")
 public class BaseApplication {
     public static void main(String[] args) {
         SpringApplication.run(BaseApplication.class, args);

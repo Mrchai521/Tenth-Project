@@ -4,6 +4,9 @@ import com.tensquare.base.dao.LabelDao;
 import com.tensquare.base.pojo.Label;
 import com.tensquare.base.service.LabelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -80,5 +83,41 @@ public class LabelServiceImpl implements LabelService {
                 return criteriaBuilder.and(parr);
             }
         });
+    }
+
+    @Override
+    public Page<Label> findPageSearch(Label label, int page, int size) {
+        Pageable pageAble = PageRequest.of(page - 1, size);
+        return labelDao.findAll(new Specification<Label>() {
+            /**
+             * 方法名: toPredicate
+             * 方法描述:  jpa的条件查询
+             * 修改日期: 2019/1/7 19:20
+             * @param root 根对象,要把条件封装到哪个对象中
+             * @param criteriaQuery 封装查询的关键字. 比如group by order by
+             * @param criteriaBuilder 封装条件对象 如果直接返回null,表示不封装任何的条件
+             * @return javax.persistence.criteria.Predicate
+             * @author taohongchao
+             * @throws
+             */
+            @Override
+            public Predicate toPredicate(Root<Label> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                //声明一个集合，用户存储所有的条件
+                ArrayList<Predicate> list = new ArrayList<>();
+                if (label.getLabelname() != null && !"".equals(label.getLabelname())) {
+                    //根据标签名称模糊查询
+                    Predicate predicate = criteriaBuilder.like(root.get("labelname").as(String.class), "%" + label.getLabelname() + "%");
+                    list.add(predicate);
+                }
+                if (label.getState() != null && !"".equals(label.getState())) {
+                    //等值查询
+                    Predicate predicate = criteriaBuilder.equal(root.get("state").as(String.class), label.getState());
+                    list.add(predicate);
+                }
+                Predicate[] prr = new Predicate[list.size()];
+                list.toArray(prr);
+                return criteriaBuilder.and(prr);
+            }
+        }, pageAble);
     }
 }

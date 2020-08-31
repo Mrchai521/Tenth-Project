@@ -1,6 +1,7 @@
 package com.tensquare.base.service;
 
 import com.tensquare.base.pojo.Label;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -47,4 +48,13 @@ public interface LabelService {
      * @return
      */
     List<Label> findSearch(Label label);
+
+    /**
+     * 分页查询
+     * @param label
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<Label> findPageSearch(Label label, int page, int size);
 }

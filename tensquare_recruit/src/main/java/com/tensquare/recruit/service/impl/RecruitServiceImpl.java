@@ -4,6 +4,7 @@ import com.tensquare.recruit.dao.RecruitDao;
 import com.tensquare.recruit.pojo.Recruit;
 import com.tensquare.recruit.service.RecruitService;
 import com.tensquare.utils.IdWorker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @create:2020/9/1
  */
 @Service
+@Slf4j
 public class RecruitServiceImpl implements RecruitService {
     // 推荐职位的值为2
     private static final String RECOMMED = "2";

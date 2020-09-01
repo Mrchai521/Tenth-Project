@@ -2,13 +2,21 @@ package com.tensquare.recruit.pojo;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+
 /**
  * @author: 柴新峰
  * @date: 2020-08-31 23:16
  * @description:
  */
 @Data
-public class Enterprise {
+@Entity
+@Table(name = "tb_enterprise")
+public class Enterprise implements Serializable {
+    @Id
     private String id;
     private String name;
     private String summary;
@@ -21,7 +29,7 @@ public class Enterprise {
     /**
      * 是否热门
      */
-    private boolean ishot;
+    private String ishot;
     private String logo;
     /**
      * 职位数

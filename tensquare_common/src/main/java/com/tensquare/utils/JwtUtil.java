@@ -1,9 +1,6 @@
 package com.tensquare.utils;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Date;
 
 /**
  * @description:
@@ -12,11 +9,11 @@ import java.util.Date;
  */
 @Configuration
 public class JwtUtil {
-    private String key ;
+    private String key;
     /**
      * 一个小时
      */
-    private long ttl ;
+    private long ttl;
 
     public String getKey() {
         return key;

@@ -1,7 +1,7 @@
 package com.tensquare.article.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.tensquare.article.pojo.Article;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Map;
@@ -51,5 +51,17 @@ public interface ArticleService {
      * @param size
      * @return
      */
-    Page search(Map map, int page, int size);
+    Page<Article> search(Map map, int page, int size);
+
+    /**
+     * 更新状态
+     * @param id
+     */
+    void updateState(String id);
+
+    /**
+     * 点赞文章
+     * @param id
+     */
+    void addThumbup(String id);
 }

@@ -14,11 +14,6 @@
         <!-- mybatis-plus begin -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatisplus-spring-boot-starter</artifactId>
-            <version>${mybatisplus-spring-boot-starter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
             <version>${mybatisplus.version}</version>
         </dependency>

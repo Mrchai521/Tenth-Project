@@ -1,24 +1,20 @@
 package com.tensquare.article.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.tensquare.article.dao.ArticleDao;
+import com.tensquare.article.dao.ArticleJpaDao;
 import com.tensquare.article.pojo.Article;
 import com.tensquare.article.service.ArticleService;
 import com.tensquare.utils.IdWorker;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
 /**
  * @description:
@@ -26,9 +22,10 @@ import java.util.Set;
  * @create:2020/8/21
  */
 @Service
+@Transactional
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
-    private ArticleDao articleDao;
+    private ArticleJpaDao articleJpaDao;
     @Autowired
     private IdWorker idWorker;
     @Autowired
@@ -38,51 +35,46 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> findAll() {
-        return articleDao.selectList(null);
+        return articleJpaDao.findAll();
     }
 
     @Override
     public Article findById(String id) {
-        return articleDao.selectById(id);
+        Optional<Article> optional = articleJpaDao.findById(id);
+        if (optional.isPresent() == true) {
+            return optional.get();
+        }
+        return null;
     }
 
     @Override
     public void add(Article article) {
         article.setId(idWorker.nextId() + "");
-        articleDao.insert(article);
+        articleJpaDao.save(article);
         //入库成功后，发送mq消息，内容是消息通知id
         rabbitTemplate.convertAndSend("article_subscribe", article.getUserid(), article.getId());
     }
 
     @Override
     public void update(Article article) {
-        EntityWrapper wrapper = new EntityWrapper<Article>();
-        wrapper.eq("id", article.getId());
-        articleDao.update(article, wrapper);
+        articleJpaDao.save(article);
     }
 
     @Override
     public void delete(String id) {
-        articleDao.deleteById(id);
+        articleJpaDao.deleteById(id);
     }
 
     @Override
-    public Page search(Map map, int page, int size) {
-        EntityWrapper wrapper = new EntityWrapper<Article>();
-        Set<String> fieldSet = map.keySet();
-        for (String field : fieldSet) {
-            //wrapper.eq(field, map.get(field));
-            wrapper.eq(null != map.get(field), field, map.get(field));
-        }
-        Page page1 = new Page(page, size);
-        List list = articleDao.selectPage(page1, wrapper);
-        page1.setRecords(list);
-        return page1;
+    public Page<Article> search(Map map, int page, int size) {
+        Pageable pageAble = PageRequest.of(page - 1, size);
+        Page<Article> articlePage = articleJpaDao.findAll(pageAble);
+        return articlePage;
     }
 
    /* public Boolean subscribe(String userId, String articleId) {
         //根据文章id查询文章作者id
-        String authorId = articleDao.selectById(articleId).getUserid();
+        String authorId = articleJpaDao.selectById(articleId).getUserid();
         //创建Rabbit管理器
         RabbitAdmin rabbitAdmin = new RabbitAdmin(rabbitTemplate.getConnectionFactory());
         //声明exchange
@@ -117,4 +109,24 @@ public class ArticleServiceImpl implements ArticleService {
             return true;
         }
     }*/
+
+    /**
+     * 修改状态
+     *
+     * @param id
+     */
+    @Override
+    public void updateState(String id) {
+        articleJpaDao.updateState(id);
+    }
+
+    /**
+     * 点赞文章
+     *
+     * @param id
+     */
+    @Override
+    public void addThumbup(String id) {
+        articleJpaDao.addThumbup(id);
+    }
 }

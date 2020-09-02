@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Bean;
  * @create:2020/8/21
  */
 @SpringBootApplication
-//Mapper扫描注解
-@MapperScan("com.tensquare.article.dao")
 @EnableEurekaClient
 public class ArticleApplication {
     public static void main(String[] args) {

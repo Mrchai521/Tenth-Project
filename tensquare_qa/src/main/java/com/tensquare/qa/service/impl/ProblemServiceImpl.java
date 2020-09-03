@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @description:
  * @author:柴新峰
@@ -37,6 +39,8 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Page<Problem> waitList(String labelId, int page, int size) {
         Pageable pageAble=PageRequest.of(page-1,size);
+        Optional<Problem> userOptional = problemDao.findById("1");
+        Problem problem = userOptional.orElseThrow(() -> new RuntimeException("信息没有取到!"));
         return problemDao.waitList(labelId,pageAble);
     }
 }

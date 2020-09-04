@@ -5,6 +5,9 @@ import com.tensquare.article.service.ArticleService;
 import com.tensquare.entity.PageResult;
 import com.tensquare.entity.Result;
 import com.tensquare.entity.StatusCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +23,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/article")
 @CrossOrigin
+@Api(tags = "文章数据操作接口")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
     /**
      * 查询全部数据
+     *
      * @return
      */
+    @ApiOperation(value = "查询全部数据接口", notes = "查询全部数据接口", httpMethod = "GET")
     @RequestMapping(value = "/findAll", method = RequestMethod.GET)
     public Result findAll() {
         List list = articleService.findAll();
@@ -36,6 +42,7 @@ public class ArticleController {
 
     /**
      * 通过id查询数据详情
+     *
      * @param id
      * @return
      */
@@ -81,6 +88,7 @@ public class ArticleController {
 
     /**
      * 分页+多条件查询
+     *
      * @param map
      * @param page
      * @param size

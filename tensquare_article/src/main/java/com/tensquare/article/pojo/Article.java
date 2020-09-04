@@ -1,5 +1,6 @@
 package com.tensquare.article.pojo;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Data
 @Table(name = "tb_article")
 @Entity
+@ApiModel(value = "文章对象模型")
 public class Article implements Serializable {
 
     /**

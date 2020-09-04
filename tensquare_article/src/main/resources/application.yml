@@ -9,7 +9,7 @@ spring:
     username: root
     password: 123456
   redis:
-    host: 127.0.0.1
+    host: 121.36.25.190
     port: 6379
     password:
     lettuce:
@@ -19,17 +19,6 @@ spring:
         max-idle: 16
         min-idle: 8
     database: 0
-    local-redis:
-      host: 127.0.0.1
-      port: 6379
-      database: 0
-      password:
-      lettuce:
-        pool:
-          max-active: 16
-          max-wait: 100
-          max-idle: 8
-          min-idle: 4
   jpa:
     database: mysql
     show-sql: true
@@ -39,5 +28,3 @@ eureka:
       defaultZone: http://127.0.0.1:6868/eureka/
   instance:
     prefer-ip-address: true
-rabbitmq:
-  host: 121.36.25.190

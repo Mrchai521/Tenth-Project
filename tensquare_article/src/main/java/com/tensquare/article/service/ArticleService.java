@@ -45,7 +45,7 @@ public interface ArticleService {
     void delete(String id);
 
     /**
-     * 分页查询
+     * 分页+条件查询
      * @param map
      * @param page
      * @param size

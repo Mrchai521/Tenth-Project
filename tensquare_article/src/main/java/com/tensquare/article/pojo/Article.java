@@ -1,10 +1,9 @@
 package com.tensquare.article.pojo;
 
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
-
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,13 +12,15 @@ import java.util.Date;
  * @author:柴新峰
  * @create:2020/8/21
  */
-@TableName("tb_article")
 @Data
+@Table(name = "tb_article")
+@Entity
 public class Article implements Serializable {
-    @TableId(type = IdType.INPUT)
+
     /**
      * ID
      */
+    @Id
     private String id;
     /**
      * 专栏ID

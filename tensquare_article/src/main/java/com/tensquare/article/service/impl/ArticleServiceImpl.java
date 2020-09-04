@@ -4,17 +4,24 @@ import com.tensquare.article.dao.ArticleJpaDao;
 import com.tensquare.article.pojo.Article;
 import com.tensquare.article.service.ArticleService;
 import com.tensquare.utils.IdWorker;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description:
@@ -29,9 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private IdWorker idWorker;
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-    /*@Autowired
-    private RedisTemplate redisTemplate;*/
+    private RedisTemplate redisTemplate;
 
     @Override
     public List<Article> findAll() {
@@ -40,11 +45,16 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article findById(String id) {
-        Optional<Article> optional = articleJpaDao.findById(id);
-        if (optional.isPresent() == true) {
-            return optional.get();
+        // 先从缓存中查询当前对象
+        Article article = (Article) redisTemplate.opsForValue().get("article_" + id);
+        // 若没有取到
+        if (article == null) {
+            // 从数据库中查询
+            article = articleJpaDao.findById(id).get();
+            // 存入缓存中
+            redisTemplate.opsForValue().set("article_" + id, article, 10, TimeUnit.SECONDS);
         }
-        return null;
+        return article;
     }
 
     @Override
@@ -52,7 +62,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setId(idWorker.nextId() + "");
         articleJpaDao.save(article);
         //入库成功后，发送mq消息，内容是消息通知id
-        rabbitTemplate.convertAndSend("article_subscribe", article.getUserid(), article.getId());
+//        rabbitTemplate.convertAndSend("article_subscribe", article.getUserid(), article.getId());
     }
 
     @Override
@@ -67,51 +77,81 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<Article> search(Map map, int page, int size) {
+        // 创建动态条件
+        Specification<Article> specification = createSpecification(map);
         Pageable pageAble = PageRequest.of(page - 1, size);
-        Page<Article> articlePage = articleJpaDao.findAll(pageAble);
+        Page<Article> articlePage = articleJpaDao.findAll(specification, pageAble);
         return articlePage;
     }
 
-   /* public Boolean subscribe(String userId, String articleId) {
-        //根据文章id查询文章作者id
-        String authorId = articleJpaDao.selectById(articleId).getUserid();
-        //创建Rabbit管理器
-        RabbitAdmin rabbitAdmin = new RabbitAdmin(rabbitTemplate.getConnectionFactory());
-        //声明exchange
-        DirectExchange exchange = new DirectExchange("article_subscribe");
-        rabbitAdmin.declareExchange(exchange);
-        //创建queue
-        Queue queue = new Queue("article_subscribe_" + userId, true);
-        //声明exchange和queue的绑定关系，设置路由键为作者id
-        Binding binding = BindingBuilder.bind(queue).to(exchange).with(authorId);
-        //存放用户订阅作者
-        String userKey = "article_subscribe_" + userId;
-        //存放作者的订阅者
-        String authorKey = "article_author_" + authorId;
-        //查询该用户是否已经订阅作者
-        Boolean flag = redisTemplate.boundSetOps(userKey).isMember(authorId);
-        if (flag) {
-            //如果为flag为true，已经订阅,则取消订阅
-            redisTemplate.boundSetOps(userKey).remove(authorId);
-            redisTemplate.boundSetOps(authorKey).remove(userId);
+    /**
+     * 动态构建条件
+     *
+     * @param map
+     * @return
+     */
+    private Specification<Article> createSpecification(Map map) {
+        return new Specification<Article>() {
+            @Override
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                // 声明一个集合存储查询条件
+                List<Predicate> predicates = new ArrayList<>();
+                //ID
+                if (map.get("id") != null && !"".equals(map.get("id"))) {
+                    predicates.add(criteriaBuilder.like(root.get("id").as(String.class), "%" + map.get("id") + "%"));
+                }
+                // 专栏ID
+                if (map.get("columnid") != null && !"".equals(map.get("columnid"))) {
+                    predicates.add(criteriaBuilder.like(root.get("columnid").as(String.class), "%" + map.get("columnid") + "%"));
+                }
+                // 用户ID
+                if (map.get("userid") != null && !"".equals("userid")) {
+                    predicates.add(criteriaBuilder.like(root.get("userid").as(String.class), "%" + map.get("userid" + "%")));
+                }
+                // 标题
+                if (map.get("title") != null && !"".equals(map.get("title"))) {
+                    predicates.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + (String) map.get("title") + "%"));
+                }
+                // 文章正文
+                if (map.get("content") != null && !"".equals(map.get("content"))) {
+                    predicates.add(criteriaBuilder.like(root.get("content").as(String.class), "%" + (String) map.get("content") + "%"));
+                }
+                // 文章封面
+                if (map.get("image") != null && !"".equals(map.get("image"))) {
+                    predicates.add(criteriaBuilder.like(root.get("image").as(String.class), "%" + (String) map.get("image") + "%"));
+                }
+                // 是否公开
+                if (map.get("ispublic") != null && !"".equals(map.get("ispublic"))) {
+                    predicates.add(criteriaBuilder.like(root.get("ispublic").as(String.class), "%" + (String) map.get("ispublic") + "%"));
+                }
+                // 是否置顶
+                if (map.get("istop") != null && !"".equals(map.get("istop"))) {
+                    predicates.add(criteriaBuilder.like(root.get("istop").as(String.class), "%" + (String) map.get("istop") + "%"));
+                }
+                // 审核状态
+                if (map.get("state") != null && !"".equals(map.get("state"))) {
+                    predicates.add(criteriaBuilder.like(root.get("state").as(String.class), "%" + (String) map.get("state") + "%"));
+                }
+                // 所属频道
+                if (map.get("channelid") != null && !"".equals(map.get("channelid"))) {
+                    predicates.add(criteriaBuilder.like(root.get("channelid").as(String.class), "%" + (String) map.get("channelid") + "%"));
+                }
+                // URL
+                if (map.get("url") != null && !"".equals(map.get("url"))) {
+                    predicates.add(criteriaBuilder.like(root.get("url").as(String.class), "%" + (String) map.get("url") + "%"));
+                }
+                // 类型
+                if (map.get("type") != null && !"".equals(map.get("type"))) {
+                    predicates.add(criteriaBuilder.like(root.get("type").as(String.class), "%" + (String) map.get("type") + "%"));
+                }
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+    }
 
-            //删除绑定的队列
-            rabbitAdmin.removeBinding(binding);
-            return false;
-        } else {
-            // 如果为flag为false，没有订阅，则进行订阅
-            redisTemplate.boundSetOps(userKey).add(authorId);
-            redisTemplate.boundSetOps(authorKey).add(userId);
-
-            //声明队列和绑定队列
-            rabbitAdmin.declareQueue(queue);
-            rabbitAdmin.declareBinding(binding);
-            return true;
-        }
-    }*/
 
     /**
-     * 修改状态
+     * 修改状态（审核）
      *
      * @param id
      */

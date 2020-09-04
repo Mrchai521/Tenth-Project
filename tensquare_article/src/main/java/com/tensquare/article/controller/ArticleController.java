@@ -24,12 +24,21 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    /**
+     * 查询全部数据
+     * @return
+     */
     @RequestMapping(value = "/findAll", method = RequestMethod.GET)
     public Result findAll() {
         List list = articleService.findAll();
         return new Result(true, StatusCode.OK, "查询成功", list);
     }
 
+    /**
+     * 通过id查询数据详情
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Result findById(@PathVariable String id) {
         Article Article = articleService.findById(id);
@@ -49,7 +58,7 @@ public class ArticleController {
     }
 
     /**
-     * 修改标签数据接口
+     * 修改数据接口
      */
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public Result update(@PathVariable String id, @RequestBody Article article) {
@@ -70,6 +79,13 @@ public class ArticleController {
         return new Result(true, StatusCode.OK, "删除成功", null);
     }
 
+    /**
+     * 分页+多条件查询
+     * @param map
+     * @param page
+     * @param size
+     * @return
+     */
     @RequestMapping(value = "/search/{page}/{size}", method = RequestMethod.POST)
     public Result search(@RequestBody Map map, @PathVariable int page, @PathVariable int size) {
         Page page1 = articleService.search(map, page, size);

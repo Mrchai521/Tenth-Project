@@ -3,6 +3,7 @@ package com.tensquare.article.service.impl;
 import com.tensquare.article.dao.ArticleJpaDao;
 import com.tensquare.article.pojo.Article;
 import com.tensquare.article.service.ArticleService;
+import com.tensquare.entity.StatusCode;
 import com.tensquare.utils.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,7 +53,7 @@ public class ArticleServiceImpl implements ArticleService {
             // 从数据库中查询
             article = articleJpaDao.findById(id).get();
             // 存入缓存中
-            redisTemplate.opsForValue().set("article_" + id, article, 10, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set("article_" + id, article, StatusCode.OVERTIME, TimeUnit.SECONDS);
         }
         return article;
     }
@@ -67,11 +68,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void update(Article article) {
+        redisTemplate.delete("article_" + article.getId());
         articleJpaDao.save(article);
     }
 
     @Override
     public void delete(String id) {
+        redisTemplate.delete("article_" + id);
         articleJpaDao.deleteById(id);
     }
 

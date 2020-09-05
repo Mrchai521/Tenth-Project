@@ -53,7 +53,7 @@ public class ArticleController {
     }
 
     /**
-     * 新增标签数据接口
+     * 新增文章数据接口
      *
      * @param article
      * @return

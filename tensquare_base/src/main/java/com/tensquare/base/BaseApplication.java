@@ -16,8 +16,8 @@ public class BaseApplication {
         SpringApplication.run(BaseApplication.class, args);
     }
 
-    @Bean
-    public IdWorker idWorker() {
-        return new IdWorker(1, 1);
-    }
+//    @Bean
+//    public IdWorker idWorker() {
+//        return new IdWorker(1, 1);
+//    }
 }

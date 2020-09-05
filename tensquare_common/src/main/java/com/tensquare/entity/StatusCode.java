@@ -7,6 +7,10 @@ package com.tensquare.entity;
  */
 public class StatusCode {
     /**
+     * 设置redis过期时间
+     */
+    public static final Long OVERTIME = 10L;
+    /**
      * 成功
      */
     public static final int OK = 200;

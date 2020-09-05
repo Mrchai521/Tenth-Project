@@ -8,10 +8,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.tensquare.recruit.*"})
-public class Application {
+public class RecruitApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(RecruitApplication.class, args);
     }
 
     @Bean

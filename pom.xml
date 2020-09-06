@@ -19,6 +19,7 @@
         <module>tensquare_recruit</module>
         <module>tensquare_qa</module>
         <module>Application</module>
+        <module>tensquare_gathering</module>
     </modules>
 
     <parent>

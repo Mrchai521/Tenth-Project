@@ -20,6 +20,8 @@
         <module>tensquare_qa</module>
         <module>Application</module>
         <module>tensquare_gathering</module>
+        <module>tensquare_mongo_test</module>
+        <module>tensquare_spit</module>
     </modules>
 
     <parent>
@@ -85,6 +87,12 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <!--mongodb依赖-->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+            <version>3.6.3</version>
         </dependency>
         <!-- devtools -->
         <dependency>

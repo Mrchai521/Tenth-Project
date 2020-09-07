@@ -1,0 +1,9 @@
+server:
+  port: 9006
+spring:
+  application:
+    name: tensquare-spit #指定服务名
+  data:
+    mongodb:
+      host: 121.36.25.190 #mongo服务器的地址,用默认的端口,如果修改了端口,那么要在后面写端口
+      database: spitdb  # MongoDB的数据库

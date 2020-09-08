@@ -4,6 +4,8 @@ import com.tensquare.utils.IdWorker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import javax.swing.*;
 
@@ -13,6 +15,8 @@ import javax.swing.*;
  * @create:2020/9/7
  */
 @SpringBootApplication
+@ComponentScan("com.tensquare.spit.*")
+@EnableMongoRepositories
 public class SpitApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpitApplication.class, args);

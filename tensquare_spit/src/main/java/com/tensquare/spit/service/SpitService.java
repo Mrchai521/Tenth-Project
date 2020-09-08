@@ -1,6 +1,8 @@
 package com.tensquare.spit.service;
 
 import com.tensquare.spit.pojo.Spit;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -45,4 +47,20 @@ public interface SpitService {
      * @param spit
      */
     void saveSpit(Spit spit);
+
+    /**
+     * 根据父级id获取数据
+     *
+     * @param parentId
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<Spit> findByParentId(String parentId, int page, int size);
+
+    /**
+     * 点赞
+     * @param spitId
+     */
+    void thumbup(String spitId);
 }

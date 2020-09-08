@@ -23,7 +23,7 @@ public class Spit implements Serializable {
      */
     private String content;
     /**
-     * 出版时间
+     * 发布日期
      */
     private Date publishtime;
     /**
@@ -32,12 +32,27 @@ public class Spit implements Serializable {
     private String userid;
     private String nickname;
     /**
-     * 访问量
+     * 浏览量
      */
     private Integer visits;
+    /**
+     * 点赞数
+     */
     private Integer thumbup;
+    /**
+     * 分享数
+     */
     private Integer share;
+    /**
+     * 回复数
+     */
     private Integer comment;
+    /**
+     * 状态
+     */
     private String state;
+    /**
+     * 父级id
+     */
     private String parentid;
 }

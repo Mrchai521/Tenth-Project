@@ -24,7 +24,7 @@ public class ArticleController {
     @RequestMapping(method = RequestMethod.POST)
     public Result save(@RequestBody Article article) {
         articleService.save(article);
-        return new Result(true, StatusCode.OK, "添加成功", null);
+        return new Result(true, StatusCode.OK, " 添加成功", null);
     }
 
     @RequestMapping(value = "/{key}/{page}/{size}", method = RequestMethod.GET)

@@ -1,0 +1,10 @@
+server:
+  port: 9007
+spring:
+  application:
+    name: tensqaure-search
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+      cluster-nodes: 121.36.25.190:9300

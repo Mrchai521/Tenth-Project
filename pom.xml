@@ -22,6 +22,7 @@
         <module>tensquare_gathering</module>
         <module>tensquare_mongo_test</module>
         <module>tensquare_spit</module>
+        <module>tensquare_search</module>
     </modules>
 
     <parent>
@@ -88,12 +89,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <!--mongodb依赖-->
+      <!--  &lt;!&ndash;mongodb依赖&ndash;&gt;
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver</artifactId>
             <version>3.6.3</version>
-        </dependency>
+        </dependency>-->
         <!-- devtools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

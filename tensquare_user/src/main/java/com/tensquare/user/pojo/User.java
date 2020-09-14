@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
 
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,10 +14,9 @@ import java.util.Date;
  * @author:柴新峰
  * @create:2020/8/26
  */
-@TableName("tb_user")
 @Data
 public class User implements Serializable {
-    @TableId(type = IdType.INPUT)
+    @Id
     private String id;
     private String mobile;
     private String password;

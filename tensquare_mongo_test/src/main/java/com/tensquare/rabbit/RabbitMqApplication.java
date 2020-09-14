@@ -1,16 +1,17 @@
-package com.tensquare.user;
+package com.tensquare.rabbit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @description: 用户启动器
- * @author:柴新峰
- * @create:2020/8/26
+ * @author: 柴新峰
+ * @date: 2020-09-13 12:42
+ *
+ * @description:
  */
 @SpringBootApplication
-public class UserApplication {
+public class RabbitMqApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class);
+        SpringApplication.run(RabbitMqApplication.class,args);
     }
 }

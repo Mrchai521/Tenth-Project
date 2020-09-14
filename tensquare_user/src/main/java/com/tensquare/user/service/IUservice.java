@@ -12,4 +12,11 @@ public interface IUservice {
      * 用户登录
      */
     User login(User user);
+
+    /**
+     * 保存用户信息
+     *
+     * @param user
+     */
+    void add(User user);
 }

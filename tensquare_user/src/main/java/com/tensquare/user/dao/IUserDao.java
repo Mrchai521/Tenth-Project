@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author:柴新峰
  * @create:2020/8/26
  */
-public interface UserDao extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
+public interface IUserDao extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
     /**
      * 通过手机号查询用户信息
      *

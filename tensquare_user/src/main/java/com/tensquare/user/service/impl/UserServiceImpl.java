@@ -1,11 +1,10 @@
 package com.tensquare.user.service.impl;
 
-import com.tensquare.user.dao.UserDao;
+import com.tensquare.user.dao.IUserDao;
 import com.tensquare.user.pojo.User;
 import com.tensquare.user.service.IUservice;
 import com.tensquare.utils.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -18,7 +17,7 @@ import java.util.Date;
 @Service
 public class UserServiceImpl implements IUservice {
     @Autowired
-    private UserDao userDao;
+    private IUserDao userDao;
     @Autowired
     private IdWorker idWorker;
 

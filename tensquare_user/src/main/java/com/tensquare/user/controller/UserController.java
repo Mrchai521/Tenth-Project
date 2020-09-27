@@ -1,9 +1,13 @@
 package com.tensquare.user.controller;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import com.tensquare.entity.Result;
 import com.tensquare.entity.StatusCode;
 import com.tensquare.user.pojo.User;
 import com.tensquare.user.service.IUservice;
+import com.tensquarre.sms.utils.SmsUtil;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,6 +26,8 @@ public class UserController {
     private IUservice iUservice;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private SmsUtil smsUtil;
 
     /**
      * 用户登录
@@ -64,12 +70,26 @@ public class UserController {
 
     /**
      * 发送注册验证码
+     *
      * @param mobile
      * @return
      */
-    @RequestMapping(value = "/sendsms/{mobile}",method = RequestMethod.POST)
-    public Result sendSms(@PathVariable String mobile){
+    @RequestMapping(value = "/sendsms/{mobile}", method = RequestMethod.POST)
+    public Result sendSms(@PathVariable String mobile) {
         iUservice.sendSms(mobile);
-        return new Result(true,StatusCode.OK,"发送成功！",null);
+        return new Result(true, StatusCode.OK, "发送成功！", null);
+    }
+    /**
+     * 真实发送短信注册验证码
+     *
+     * @param mobile
+     * @return
+     */
+    @RequestMapping(value = "/sendSmsCode/{mobile}", method = RequestMethod.POST)
+    public Result sendSmsCode(@PathVariable String mobile) throws ClientException {
+        String checkCode = RandomStringUtils.randomNumeric(6);
+        SendSmsResponse sendSmsResponse  = smsUtil.sendSms(mobile,"SMS_203675432","柴先森后台管理系统",
+                "{\"code\":\""+checkCode+"\"}");
+        return new Result(true, StatusCode.OK, "发送成功！", sendSmsResponse);
     }
 }

@@ -7,7 +7,7 @@ spring:
 
 aliyun:
   sms:
-    accessKeyId:
-    accessKeySecret:
-    templateCode:
-    signName:
+    accessKeyId: LTAI4GH7jWKEU2V9ASzXCfHP
+    accessKeySecret: 2FTLtjWRn8cBKNf7ZOjWkHrPk5E3vl
+    templateCode: SMS_203675432
+    signName: 柴先森后台管理系统

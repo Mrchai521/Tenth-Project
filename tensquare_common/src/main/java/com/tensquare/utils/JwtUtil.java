@@ -1,11 +1,10 @@
 package com.tensquare.utils;
 
-import com.sun.org.apache.xml.internal.security.algorithms.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.Date;
 
@@ -15,11 +14,12 @@ import java.util.Date;
  * @create:2020/9/15
  */
 @ConfigurationProperties("jwt.config")
-@EnableConfigurationProperties(JwtUtil.class)
 public class JwtUtil {
     private String key ;
-
-    private long ttl ;//一个小时
+    /**
+     * 一个小时
+     */
+    private long ttl ;
 
     public String getKey() {
         return key;
@@ -56,7 +56,6 @@ public class JwtUtil {
         }
         return builder.compact();
     }
-
     /**
      * 解析JWT
      * @param jwtStr

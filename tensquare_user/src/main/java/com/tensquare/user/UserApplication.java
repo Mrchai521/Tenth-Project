@@ -1,9 +1,12 @@
 package com.tensquare.user;
 
 import com.tensquare.utils.IdWorker;
+import com.tensquare.utils.JwtUtil;
+import com.tensquarre.sms.utils.SmsUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * @description: 用户启动器
@@ -19,5 +22,20 @@ public class UserApplication {
     @Bean
     public IdWorker idWorker() {
         return new IdWorker();
+    }
+
+    @Bean
+    public JwtUtil jwtUtil() {
+        return new JwtUtil();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SmsUtil smsUtil() {
+        return new SmsUtil();
     }
 }

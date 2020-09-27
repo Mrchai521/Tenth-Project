@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
  * @create:2020/9/15
  */
 @ConfigurationProperties("jwt.config")
+@EnableConfigurationProperties(JwtUtil.class)
 public class JwtUtil {
     private String key ;
 

@@ -4,3 +4,10 @@ server:
 spring:
   rabbitmq:
     host: 121.36.25.190
+
+aliyun:
+  sms:
+    accessKeyId:
+    accessKeySecret:
+    templateCode:
+    signName:

@@ -62,4 +62,14 @@ public class UserController {
         return new Result(true, StatusCode.OK, "注册成功！", null);
     }
 
+    /**
+     * 发送注册验证码
+     * @param mobile
+     * @return
+     */
+    @RequestMapping(value = "/sendsms/{mobile}",method = RequestMethod.POST)
+    public Result sendSms(@PathVariable String mobile){
+        iUservice.sendSms(mobile);
+        return new Result(true,StatusCode.OK,"发送成功！",null);
+    }
 }

@@ -19,4 +19,10 @@ public interface IUservice {
      * @param user
      */
     void add(User user);
+
+    /**
+     * 获取验证码
+     * @param mobile
+     */
+    void sendSms(String mobile);
 }

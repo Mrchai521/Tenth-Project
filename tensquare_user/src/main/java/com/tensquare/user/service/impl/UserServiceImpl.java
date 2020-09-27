@@ -5,10 +5,13 @@ import com.tensquare.user.pojo.User;
 import com.tensquare.user.service.IUservice;
 import com.tensquare.utils.IdWorker;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +29,8 @@ public class UserServiceImpl implements IUservice {
     private IdWorker idWorker;
     @Autowired
     private RedisTemplate redisTemplate;
-
+    @Autowired
+    private HttpServletRequest request;
     @Override
     public User login(User user) {
         return null;
@@ -62,5 +66,14 @@ public class UserServiceImpl implements IUservice {
         hashMap.put("checkCode", checkCode);
         redisTemplate.convertAndSend("sms", hashMap);
         System.out.println("验证码为：" + checkCode);
+    }
+
+    @Override
+    public void removeUser(String id) {
+        String token = (String) request.getAttribute("claims_admin");
+        if(StringUtils.isEmpty(token)){
+            throw new RuntimeException("权限不足！");
+        }
+        userDao.deleteById(id);
     }
 }

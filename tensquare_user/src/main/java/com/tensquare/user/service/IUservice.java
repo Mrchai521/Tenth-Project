@@ -22,7 +22,15 @@ public interface IUservice {
 
     /**
      * 获取验证码
+     *
      * @param mobile
      */
     void sendSms(String mobile);
+
+    /**
+     * 通过id删除用户
+     *
+     * @param id
+     */
+    void removeUser(String id);
 }

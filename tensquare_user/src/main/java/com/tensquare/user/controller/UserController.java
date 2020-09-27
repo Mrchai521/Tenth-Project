@@ -79,6 +79,7 @@ public class UserController {
         iUservice.sendSms(mobile);
         return new Result(true, StatusCode.OK, "发送成功！", null);
     }
+
     /**
      * 真实发送短信注册验证码
      *
@@ -88,8 +89,20 @@ public class UserController {
     @RequestMapping(value = "/sendSmsCode/{mobile}", method = RequestMethod.POST)
     public Result sendSmsCode(@PathVariable String mobile) throws ClientException {
         String checkCode = RandomStringUtils.randomNumeric(6);
-        SendSmsResponse sendSmsResponse  = smsUtil.sendSms(mobile,"SMS_203675432","柴先森后台管理系统",
-                "{\"code\":\""+checkCode+"\"}");
+        SendSmsResponse sendSmsResponse = smsUtil.sendSms(mobile, "SMS_203675432", "柴先森后台管理系统",
+                "{\"code\":\"" + checkCode + "\"}");
         return new Result(true, StatusCode.OK, "发送成功！", sendSmsResponse);
+    }
+
+    /**
+     * 通过id删除用户
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "removeUser/{id}", method = RequestMethod.DELETE)
+    public Result removeUser(@PathVariable String id) {
+        iUservice.removeUser(id);
+        return new Result(true, StatusCode.OK, "删除成功", null);
     }
 }

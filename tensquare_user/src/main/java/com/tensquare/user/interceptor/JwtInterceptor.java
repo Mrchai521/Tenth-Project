@@ -47,7 +47,9 @@ public class JwtInterceptor implements HandlerInterceptor {
                 }
             }
         }
-
+        //return true代表放行, return false 代表不放行
+        //任何情况下都要放行, 最终具体的操作,要看其业务
+        //拦截器只负责把请求头中包含token信息进行解析
         return true;
     }
 }

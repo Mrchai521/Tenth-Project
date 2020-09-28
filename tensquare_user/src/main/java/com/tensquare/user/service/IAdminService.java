@@ -14,4 +14,10 @@ public interface IAdminService {
      * @return
      */
     Admin login(Admin admin);
+
+    /**
+     * 删除
+     * @param id
+     */
+    void deleteById(String id);
 }

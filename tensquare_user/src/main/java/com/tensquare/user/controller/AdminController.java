@@ -7,10 +7,7 @@ import com.tensquare.user.service.IAdminService;
 import com.tensquare.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -47,4 +44,9 @@ public class AdminController {
         hashMap.put("admin", admin);
         return new Result(true, StatusCode.OK, "登录成功", hashMap);
     }
+    @RequestMapping(value = "adminDeleteById/{id}",method = RequestMethod.DELETE)
+    public void deleteById(@PathVariable String id) {
+        iAdminService.deleteById(id);
+    }
+
 }

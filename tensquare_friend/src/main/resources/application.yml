@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: tensquare-friend
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+  jpa:
+    show-sql: true
+    database: mysql
+server:
+  port: 9010
+jwt:
+  config:
+    key: itcast
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:6868/eureka
+  instance:
+    prefer-ip-address: true # 此处配置项的含义是,部署线上时,模块之间可以跨域访问
+

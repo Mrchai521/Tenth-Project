@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
  * @create:2020/8/28
  */
 @SpringBootApplication
+
 public class BaseApplication {
     public static void main(String[] args) {
         SpringApplication.run(BaseApplication.class, args);

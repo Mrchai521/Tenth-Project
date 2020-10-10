@@ -3,6 +3,7 @@ package com.tensquare.qa.controller;
 import com.tensquare.entity.PageResult;
 import com.tensquare.entity.Result;
 import com.tensquare.entity.StatusCode;
+import com.tensquare.qa.feign.BaseClient;
 import com.tensquare.qa.pojo.Problem;
 import com.tensquare.qa.service.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class ProblemController {
     @Autowired
     private ProblemService problemService;
+    @Autowired
+    private BaseClient baseClient;
 
     /**
      * 最新问答列表
@@ -61,5 +64,17 @@ public class ProblemController {
     public Result waitList(@PathVariable String labelId, @PathVariable int page, @PathVariable int size) {
         Page<Problem> problemPage = problemService.waitList(labelId, page, size);
         return new Result(true, StatusCode.OK, "查询成功！", new PageResult<Problem>((int) problemPage.getTotalElements(), problemPage.getContent()));
+    }
+
+    /**
+     * 通过labelId查询标签
+     *
+     * @param labelId
+     * @return
+     */
+    @RequestMapping(value = "/label/{labelId}", method = RequestMethod.GET)
+    public Result findByLabelId(@PathVariable("labelId") String labelId) {
+        Result result = baseClient.findById(labelId);
+        return result;
     }
 }

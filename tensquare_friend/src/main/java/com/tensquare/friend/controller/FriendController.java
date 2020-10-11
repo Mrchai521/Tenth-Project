@@ -2,6 +2,7 @@ package com.tensquare.friend.controller;
 
 import com.tensquare.entity.Result;
 import com.tensquare.entity.StatusCode;
+import com.tensquare.friend.client.UserClient;
 import com.tensquare.friend.service.IFriendService;
 import com.tensquare.friend.service.INoFriendService;
 import io.jsonwebtoken.Claims;
@@ -26,9 +27,11 @@ public class FriendController {
     private IFriendService iFriendService;
     @Autowired
     private INoFriendService iNoFriendService;
+    @Autowired
+    private UserClient userClient;
 
     @RequestMapping(value = "/like/{friendId}/{type}", method = RequestMethod.PUT)
-    public Result addFriend(@PathVariable String friendId, @PathVariable String type) {
+    public Result addFriend(@PathVariable String friendId, @PathVariable int type) {
         //验证是否登录
         Claims claims = (Claims) request.getAttribute("claims_user");
         if (StringUtils.isEmpty(claims)) {
@@ -46,6 +49,7 @@ public class FriendController {
                     return new Result(false, StatusCode.ERROR, "不能重复添加好友", null);
                 }
                 if (flag == 1) {
+                    userClient.updateFanscountAndFollowcount(userId,friendId,type);
                     return new Result(true, StatusCode.OK, "添加成功", null);
                 }
             } else if ("2".equals(type)) {
@@ -63,4 +67,5 @@ public class FriendController {
             return new Result(false, StatusCode.ERROR, "参数异常", null);
         }
     }
+
 }

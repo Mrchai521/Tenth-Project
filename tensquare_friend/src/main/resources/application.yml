@@ -5,6 +5,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
+    url: jdbc:mysql://121.36.25.190:3306/tensquare_friend?characterEncoding=utf-8
   jpa:
     show-sql: true
     database: mysql

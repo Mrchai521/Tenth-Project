@@ -5,6 +5,8 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -13,7 +15,8 @@ import java.util.Date;
  * @author:柴新峰
  * @create:2020/9/15
  */
-@ConfigurationProperties("jwt.config")
+@ConfigurationProperties(prefix = "jwt.config")
+@Component
 public class JwtUtil {
     private String key ;
     /**

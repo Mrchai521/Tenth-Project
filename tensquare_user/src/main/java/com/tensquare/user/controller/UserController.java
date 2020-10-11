@@ -5,13 +5,17 @@ import com.aliyuncs.exceptions.ClientException;
 import com.tensquare.entity.Result;
 import com.tensquare.entity.StatusCode;
 import com.tensquare.user.pojo.User;
-import com.tensquare.user.service.IUservice;
+import com.tensquare.user.service.IUserService;
+import com.tensquare.utils.JwtUtil;
 import com.tensquarre.sms.utils.SmsUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @description:
@@ -23,11 +27,13 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class UserController {
     @Autowired
-    private IUservice iUservice;
+    private IUserService iUserService;
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
     private SmsUtil smsUtil;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     /**
      * 用户登录
@@ -37,11 +43,15 @@ public class UserController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody User user) {
-        User userResult = iUservice.login(user);
-        if (userResult != null) {
-            return new Result(true, StatusCode.OK, "登录成功", userResult);
+        user = iUserService.login(user.getMobile(), user.getPassword());
+        if (user == null) {
+            return new Result(false, StatusCode.ERROR, "登录失败", null);
         }
-        return new Result(false, StatusCode.ERROR, "登录失败", null);
+        String token = jwtUtil.createJWT(user.getId(), user.getMobile(), "user");
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        map.put("roles", user);
+        return new Result(true, StatusCode.OK, "登录成功", map);
     }
 
     /**
@@ -64,7 +74,7 @@ public class UserController {
             return new Result(false, StatusCode.ERROR, "请输入验证码", null);
         }
         // 验证码正确，保存用户信息
-        iUservice.add(user);
+        iUserService.add(user);
         return new Result(true, StatusCode.OK, "注册成功！", null);
     }
 
@@ -76,7 +86,7 @@ public class UserController {
      */
     @RequestMapping(value = "/sendsms/{mobile}", method = RequestMethod.POST)
     public Result sendSms(@PathVariable String mobile) {
-        iUservice.sendSms(mobile);
+        iUserService.sendSms(mobile);
         return new Result(true, StatusCode.OK, "发送成功！", null);
     }
 
@@ -102,7 +112,28 @@ public class UserController {
      */
     @RequestMapping(value = "removeUser/{id}", method = RequestMethod.DELETE)
     public Result removeUser(@PathVariable String id) {
-        iUservice.removeUser(id);
+        iUserService.removeUser(id);
         return new Result(true, StatusCode.OK, "删除成功", null);
+    }
+    /**
+     * 增加
+     * @param user
+     */
+    @RequestMapping(method=RequestMethod.POST)
+    public Result add(@RequestBody User user){
+        iUserService.add(user);
+        return new Result(true,StatusCode.OK,"增加成功",null);
+    }
+
+    /**
+     * 更新粉丝数和关注数
+     *
+     * @param userId
+     * @param friendId
+     * @param type
+     */
+    @RequestMapping(value = "/{userId}/{friendId}/{type}", method = RequestMethod.PUT)
+    public void updateFanscountAndFollowcount(@PathVariable String userId, @PathVariable String friendId, @PathVariable int type) {
+        iUserService.updateFanscountAndFollowcount(userId, friendId, type);
     }
 }

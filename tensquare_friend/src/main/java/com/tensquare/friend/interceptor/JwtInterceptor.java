@@ -26,7 +26,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         if (header != null && !"".equals(header)) {
             //header信息不为空, 那么就进行解析的操作
-            if (header.startsWith("Bearer ")) {
+            if (header.startsWith("Bearer")) {
                 //得到token
                 String token = header.substring(7);
 

@@ -2,12 +2,12 @@ package com.tensquare.user.service.impl;
 
 import com.tensquare.user.dao.IUserDao;
 import com.tensquare.user.pojo.User;
-import com.tensquare.user.service.IUservice;
+import com.tensquare.user.service.IUserService;
 import com.tensquare.utils.IdWorker;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * @create:2020/8/26
  */
 @Service
-public class UserServiceImpl implements IUservice {
+public class UserServiceImpl implements IUserService {
     @Autowired
     private IUserDao userDao;
     @Autowired
@@ -31,8 +31,15 @@ public class UserServiceImpl implements IUservice {
     private RedisTemplate redisTemplate;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
     @Override
-    public User login(User user) {
+    public User login(String mobile, String password) {
+        User userResult = userDao.findByMobile(mobile);
+        if (userResult != null && encoder.matches(password, userResult.getPassword())) {
+            return userResult;
+        }
         return null;
     }
 
@@ -40,6 +47,8 @@ public class UserServiceImpl implements IUservice {
     public void add(User user) {
         user.setId(idWorker.nextId() + "");
         // 初始化
+        //密码加密
+        user.setPassword(encoder.encode(user.getPassword()));
         // 关注数
         user.setFollowcount(0);
         // 粉丝数
@@ -71,9 +80,17 @@ public class UserServiceImpl implements IUservice {
     @Override
     public void removeUser(String id) {
         String token = (String) request.getAttribute("claims_admin");
-        if(StringUtils.isEmpty(token)){
+        if (StringUtils.isEmpty(token)) {
             throw new RuntimeException("权限不足！");
         }
         userDao.deleteById(id);
+    }
+
+    @Override
+    public void updateFanscountAndFollowcount(String userId, String friendId, int type) {
+        //更新被关注人的粉丝数
+        userDao.updateFanscount(type, friendId);
+        //更新当前用户的关注数
+        userDao.updateFollowcount(type, userId);
     }
 }

@@ -8,7 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>tensquare_user</artifactId>
+    <artifactId>tensquare-user</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

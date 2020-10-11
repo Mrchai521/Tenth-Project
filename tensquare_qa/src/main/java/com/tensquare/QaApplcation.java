@@ -18,22 +18,25 @@ import org.springframework.context.annotation.Bean;
 @EnableEurekaClient
 //发现服务
 @EnableDiscoveryClient
-//采取feign的发现服务
+// 采取feign的方式发现服务
 @EnableFeignClients
 public class QaApplcation {
     public static void main(String[] args) {
         SpringApplication.run(QaApplcation.class, args);
     }
+
     @Bean
     public IdWorker idWorkker() {
         return new IdWorker(1, 1);
     }
+
     /**
      * 把jwt对象注入容器中
+     *
      * @return
      */
     @Bean
-    public JwtUtil jwtUtil(){
+    public JwtUtil jwtUtil() {
         return new JwtUtil();
     }
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @CrossOrigin
-@RequestMapping("/prolem")
+@RequestMapping("/problem")
 public class ProblemController {
     @Autowired
     private ProblemService problemService;

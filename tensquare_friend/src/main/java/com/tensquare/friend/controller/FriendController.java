@@ -5,12 +5,16 @@ import com.tensquare.entity.StatusCode;
 import com.tensquare.friend.client.UserClient;
 import com.tensquare.friend.service.IFriendService;
 import com.tensquare.friend.service.INoFriendService;
+import com.tensquare.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * @description: 交友业务的Controller层
@@ -28,6 +32,8 @@ public class FriendController {
     private INoFriendService iNoFriendService;
     @Autowired
     private UserClient userClient;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     /**
      * 添加好友
@@ -39,7 +45,9 @@ public class FriendController {
     @RequestMapping(value = "/like/{friendId}/{type}", method = RequestMethod.PUT)
     public Result addFriend(@PathVariable String friendId, @PathVariable int type) {
         //验证是否登录
-        Claims claims = (Claims) request.getAttribute("claims_user");
+
+        String token = (String) request.getAttribute("claims_user");
+        Claims claims = jwtUtil.parseJWT(token);
         if (StringUtils.isEmpty(claims)) {
             //说明当前用户没有user角色
             return new Result(false, StatusCode.LOGINERROR, "权限不足", null);
@@ -48,7 +56,7 @@ public class FriendController {
         String userId = claims.getId();
         //判断是添加好友还是添加非好友
         if (!StringUtils.isEmpty(type)) {
-            if ("1".equals(type)) {
+            if (type == 1) {
                 // 添加好友
                 int flag = iFriendService.addFriend(userId, friendId);
                 if (flag == 0) {

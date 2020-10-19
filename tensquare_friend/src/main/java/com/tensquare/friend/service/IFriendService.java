@@ -13,4 +13,6 @@ public interface IFriendService {
      * @return
      */
     int addFriend(String userId,String friendId);
+
+    void deleteFriend(String userid, String friendId);
 }

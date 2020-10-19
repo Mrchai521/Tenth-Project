@@ -44,6 +44,11 @@ public class AdminController {
         hashMap.put("admin", admin);
         return new Result(true, StatusCode.OK, "登录成功", hashMap);
     }
+
+    /**
+     * 删除admin
+     * @param id
+     */
     @RequestMapping(value = "adminDeleteById/{id}",method = RequestMethod.DELETE)
     public void deleteById(@PathVariable String id) {
         iAdminService.deleteById(id);

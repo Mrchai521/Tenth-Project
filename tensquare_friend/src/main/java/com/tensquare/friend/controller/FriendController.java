@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
  * @create:2020/10/10
  */
 @RestController
-@CrossOrigin
 @RequestMapping("/friend")
 public class FriendController {
     @Autowired
@@ -30,6 +29,13 @@ public class FriendController {
     @Autowired
     private UserClient userClient;
 
+    /**
+     * 添加好友
+     *
+     * @param friendId
+     * @param type
+     * @return
+     */
     @RequestMapping(value = "/like/{friendId}/{type}", method = RequestMethod.PUT)
     public Result addFriend(@PathVariable String friendId, @PathVariable int type) {
         //验证是否登录
@@ -49,7 +55,7 @@ public class FriendController {
                     return new Result(false, StatusCode.ERROR, "不能重复添加好友", null);
                 }
                 if (flag == 1) {
-                    userClient.updateFanscountAndFollowcount(userId,friendId,type);
+                    userClient.updateFanscountAndFollowcount(userId, friendId, type);
                     return new Result(true, StatusCode.OK, "添加成功", null);
                 }
             } else if ("2".equals(type)) {
@@ -66,6 +72,22 @@ public class FriendController {
         } else {
             return new Result(false, StatusCode.ERROR, "参数异常", null);
         }
+    }
+
+    @RequestMapping(value = "/{friendId}", method = RequestMethod.DELETE)
+    public Result removeFriend(@PathVariable String friendId) {
+        System.out.println(request.getAttribute("claims_user"));
+        //验证是否登录，并且拿到当前登录的用户id
+        Claims claims = (Claims) request.getAttribute("claims_user");
+        if (claims == null) {
+            //说明当前用户没有user角色
+            return new Result(false, StatusCode.LOGINERROR, "权限不足", null);
+        }
+        //得到当前登录的用户id
+        String userid = claims.getId();
+        iFriendService.deleteFriend(userid, friendId);
+        userClient.updateFanscountAndFollowcount(userid, friendId, -1);
+        return new Result(true, StatusCode.OK, "删除成功", null);
     }
 
 }

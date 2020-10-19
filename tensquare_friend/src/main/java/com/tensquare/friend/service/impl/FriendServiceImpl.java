@@ -42,4 +42,9 @@ public class FriendServiceImpl implements IFriendService {
         }
         return 1;
     }
+
+    @Override
+    public void deleteFriend(String userid, String friendId) {
+
+    }
 }

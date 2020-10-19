@@ -17,7 +17,7 @@ spring:
       host: 121.36.25.190
 jwt:
   config:
-    key: A0B1C2D3E4F5G6H7I8J9KALBMCNDOEPFQ0R1S2T3U4V5W6X7Y8Z9
+    key: itcast
     ttl: 3600000
 eureka:
   client:

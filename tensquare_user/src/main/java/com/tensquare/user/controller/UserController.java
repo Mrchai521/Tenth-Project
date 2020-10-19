@@ -8,12 +8,14 @@ import com.tensquare.user.pojo.User;
 import com.tensquare.user.service.IUserService;
 import com.tensquare.utils.JwtUtil;
 import com.tensquarre.sms.utils.SmsUtil;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +36,8 @@ public class UserController {
     private SmsUtil smsUtil;
     @Autowired
     private JwtUtil jwtUtil;
-
+    @Autowired
+    private HttpServletRequest request;
     /**
      * 用户登录
      *
@@ -112,17 +115,27 @@ public class UserController {
      */
     @RequestMapping(value = "removeUser/{id}", method = RequestMethod.DELETE)
     public Result removeUser(@PathVariable String id) {
+        //由于有了拦截器,因此直接从拦截器的request中获取admin角色的token
+
+        Claims token = (Claims) request.getAttribute("claims_user");
+
+        //如果获取的token为空,那么就代表权限不足
+        if (StringUtils.isNotEmpty((CharSequence) token)) {
+            throw new RuntimeException("权限不足!");
+        }
         iUserService.removeUser(id);
         return new Result(true, StatusCode.OK, "删除成功", null);
     }
+
     /**
      * 增加
+     *
      * @param user
      */
-    @RequestMapping(method=RequestMethod.POST)
-    public Result add(@RequestBody User user){
+    @RequestMapping(method = RequestMethod.POST)
+    public Result add(@RequestBody User user) {
         iUserService.add(user);
-        return new Result(true,StatusCode.OK,"增加成功",null);
+        return new Result(true, StatusCode.OK, "增加成功", null);
     }
 
     /**

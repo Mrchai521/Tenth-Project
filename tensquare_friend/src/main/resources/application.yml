@@ -14,6 +14,7 @@ server:
 jwt:
   config:
     key: itcast
+    ttl: 3600000
 eureka:
   client:
     service-url:

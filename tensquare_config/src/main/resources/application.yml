@@ -1,0 +1,19 @@
+server:
+  port: 12000
+spring:
+  application:
+    name: tensquare-config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/cxf15364946594/tensequare_dev.git
+          username: cxf15364946594
+          password: cxf15364946594
+  rabbitmq:
+    host: 121.36.25.190
+management: #暴露触发消息总线的地址
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh  #使用bus必须要加的bus
